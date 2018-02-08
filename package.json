@@ -1,10 +1,14 @@
 {
   "name": "apm-loader",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A reference for how to build an APM that incercepts certain specifiers and replaces them with other modules.",
+  "files": [
+    "overloads/fs.mjs",
+    "dirname.js",
+    "index.mjs"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --experimental-modules test/index.js"
   },
   "keywords": [],
   "author": "",

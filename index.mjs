@@ -1,22 +1,27 @@
 import __dirname from './dirname';
-import {URL} from 'url';
+import util from 'util';
+const {promisify} = util;
+import fs from 'fs';
+const asyncStat = promisify(fs.stat);
+import url from 'url';
+const {URL} = url;
 const dirHref = `file://${__dirname}/`;
-const testHref = `${dirHref}/test.mjs`;
+const overloadsHref = `${dirHref}overloads/`;
 
 export async function resolve(specifier, parentModuleURL, defaultResolver) {
   if (
-    parentModuleURL !== testHref &&
-    new URL(parentModuleURL).href.indexOf(dirHref) == 0) {
+    new URL(parentModuleURL).href.indexOf(overloadsHref) == 0) {
     return defaultResolver(specifier, parentModuleURL);
   }
   try {
-    const overloadHref = new URL(
-      `./overloads/${specifier}.mjs`,
-      dirHref
-    ).href;
-    if (overloadHref.indexOf(dirHref) === 0) {
+    const overloadUrl = new URL(
+      `./${specifier}.mjs`,
+      overloadsHref
+    );
+    if (overloadUrl.href.indexOf(overloadsHref) === 0) {
+      await asyncStat(overloadUrl);
       return defaultResolver(
-        overloadHref,
+        overloadUrl.href,
         dirHref
       );
     }
