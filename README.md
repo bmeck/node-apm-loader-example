@@ -4,8 +4,13 @@ This loader overloads the `fs` module specifier to point to a new version with a
 
 This loader can be used by passing in the `--loader` flag to `node`.
 
-Feel free to play with `sandbox.mjs` by running:
+```sh
+node --experimental-modules --loader ./index.mjs $MAIN
+```
+
+or
 
 ```sh
-node --experimental-modules --loader ./index.mjs sandbox.mjs
+NODE_OPTIONS='--experimental-modules --loader ./index.mjs'
+node $MAIN
 ```

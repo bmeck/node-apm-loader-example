@@ -9,6 +9,11 @@ const {URL} = url;
 const dirHref = `file://${__dirname}/`;
 const overloadsHref = `${dirHref}overloads/`;
 
+// you can do any global mutation here
+// setup async_hooks etc.
+console.error('initializing loader... (do setup here)');
+
+// this will find the package.json URL associated with a given file URL
 const grabPackage = async (url) => {
   try {
     return JSON.parse(
