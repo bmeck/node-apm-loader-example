@@ -1,4 +1,4 @@
-import __dirname from './dirname';
+import __dirname from './dirname.js';
 import util from 'util';
 const {promisify} = util;
 import fs from 'fs';
@@ -9,6 +9,9 @@ const {URL} = url;
 const dirHref = `file://${__dirname}/`;
 const overloadsHref = `${dirHref}overloads/`;
 
+import {pathToFileURL} from 'url';
+const baseURL = pathToFileURL(process.cwd()).href;
+
 // you can do any global mutation here
 // setup async_hooks etc.
 console.error('initializing loader... (do setup here)');
@@ -17,7 +20,7 @@ console.error('initializing loader... (do setup here)');
 const grabPackage = async (url) => {
   try {
     return JSON.parse(
-      await asyncReadFile(new URL('./package.json', url)));
+      await asyncReadFile(new URL('./package.json', url ? url : baseURL)));
   } catch (e) {
     if (e.code !== 'ENOENT') {
       throw e;
@@ -56,9 +59,9 @@ const overloads = {
   }
 }
 export async function resolve(specifier, parentModuleURL, defaultResolver) {
-  if (
-    new URL(parentModuleURL).href.indexOf(overloadsHref) == 0) {
-    return defaultResolver(specifier, parentModuleURL);
+  const url = parentModuleURL ? parentModuleURL : baseURL;
+  if (new URL(url).href.indexOf(overloadsHref) == 0) {
+    return defaultResolver(specifier, url);
   }
   try {
     const overload = overloads[specifier];
