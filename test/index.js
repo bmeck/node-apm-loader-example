@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+'use strict';
+
+/* eslint-disable no-console */
+
 const child_process = require('child_process');
 const assert = require('assert');
 const path = require('path');
@@ -26,7 +30,6 @@ const tests = [
   },
   function (n) {
     console.log(`${n}. testing on ${shortFixture('call_readFile.mjs')}`);
-    debugger
     const child = child_process.spawnSync(process.execPath, args.concat(loaderArgs, f, f));
 
     assert.strictEqual(`${child.stderr}`, 'initializing loader... (do setup here)\n');
